@@ -1,0 +1,3982 @@
+swagger: "2.0"
+info:
+  description: "MMI Analytics es la plataforma que provee de análisis y seguimiento de 1) noticias en medios de comunicación (tv, radio, prensa, digitales, blogs, webs…) 2) conversaciones en redes sociales. MMI sirve diariamente a más de 2.000 usuarios de más de 400 organizaciones en España, América Latina y África.."
+  version: "1.0.0"
+  title: "MMI API"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "api.mmi-e.com/mmiapi.php"
+#basePath: "api.mmi-e.com/mmiapi.php"
+tags:
+- name: "Categorías"
+  description: "Conjunto de métodos relacionados con categorías.
+
+Las categorías son la base fundamental de la estructura de información contenida en el sistema.
+"
+- name: "Prensa"
+  description: "Conjunto de métodos relacionados con noticias y menciones en prensa (papel)."
+
+- name: "Television"
+  description: "Conjunto de métodos relacionados con noticias y menciones en TV"
+  
+- name: "Radio"
+  description: "Conjunto de métodos relacionados con noticias y menciones en radio."
+  
+- name: "Medios Digitales"
+  description: "Conjunto de métodos relacionados con noticias y menciones en medios digitales."
+  
+- name: "Redes Sociales"
+  description: "Conjunto de métodos relacionados con noticias y menciones en redes sociales, un concepto que incluye blogs, webs, foros, sitios de noticias y generales… además de las redes sociales propiamente dichas (Twitter, Instagram, Facebook…)."
+  
+- name: "Usuarios"
+  description: "Conjunto de métodos relacionados con los usuarios del sistema."
+  
+- name: "Soportes" 
+  description: "Conjunto de métodos relacionados con la gestión de datos del sistema relacionados con soportes."
+  
+- name: "Perfiles"
+  description: "Conjunto de métodos relacionados con la gestión de datos del sistema relacionados con perfiles."
+  
+- name: "Alertas"
+  description: "Conjunto de métodos relacionados con la gestión de datos del sistema relacionados con alertas."
+  
+- name: "Obtención de recursos multimedia"
+  description: "Conjunto de métodos relacionados con la obtención de recursos multimedia, como cortes de TV, radio, prensa…"
+  
+- name: "Cuantificación de menciones"
+  description: "Conjunto de métodos relacionados con el conteo de noticias o menciones."
+  
+schemes:
+- "http"
+paths:
+  /getcategorias/{ApiKey}/{idzona}:
+    get:
+      tags:
+        - "Categorías"
+      description: Obtiene el listado de las categorías incluidas en el sistema para la zona especificada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer      
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+              CODIGO:
+                type: integer
+              NOMBRE:
+                type: string
+              NOMBREWEB:
+                type: string
+              IDUBICACIONCATEGORIA:
+                type: integer
+              LONGITUD:
+                type: integer
+              LATITUD:
+                type: integer
+
+  /getcategoria_detalle/{ApiKey}/{idzona}/{Idcategoria}:
+    get:
+      tags:
+        - "Categorías"
+      description: Obtiene todos los campos de información incluidos en una categoría concreta.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idcategoria
+        in: path
+        required: true
+        description: Identificador de la categoría que se desea consultar.
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+              IDPADRE:
+                type: integer
+              CODIGO:
+                type: integer
+              ACRONIMO:
+                type: string
+              NOMBRE:
+                type: string
+              NOMBREWEB:
+                type: string
+              ACTIVO:
+                type: integer
+              TOTAL:
+                type: integer
+              IDUBICACIONCATEGORIA:
+                type: integer
+              LONGITUD:
+                type: integer
+              LATITUD:
+                type: integer
+              PC_EMAIL_VINCULADO:
+                type: string
+              PC_TWITTER_VINCULADO:
+                type: string
+              PC_MOVIL_VINCULADO:
+                type: string
+              PC_INSTAGRAM_VINCULADO:
+                type: string
+              PC_FACEBOOK_VINCULADO:
+                type: string
+
+
+  /getpesos/{ApiKey}/{idzona}:
+    get:
+      tags:
+        - "Categorías"
+      description: Obtiene los pesos utilizados en la zona para cada categoría asignada a una noticia.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDPESO:
+                type: integer
+              NOMBRE:
+                type: string
+
+  /getnoticiasprensa/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Prensa"
+      description: Obtiene todas las noticias de prensa.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: string
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+              CODIGO:
+                type: integer
+              NOMBRE:
+                type: string
+              NOMBREWEB:
+                type: string
+              IDUBICACIONCATEGORIA:
+                type: integer
+              LONGITUD:
+                type: integer
+              LATITUD:
+                type: integer
+
+  /getnoticiasprensa_x_categorias/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}/{Offset}/{Limit}:
+    post:
+      tags: 
+        - "Prensa"
+      description: Obtiene todas las noticias de prensa.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      - name : Offset
+        in: path
+        description: ""
+        required: true
+        type: integer
+      - name : Limit
+        in: path
+        description: ""
+        required: true
+        type: integer
+      - name: Json
+        in: header
+        required: true
+        description: Json con campos IDCATEGORIA y valor del id.
+        type: string
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDNOTICIA:
+                type: integer
+              FECHA:
+                type: string
+                format: date
+              FECHAHORAPICADO:
+                type: string
+                format: date
+              TEMA:
+                type: string
+                format: url
+              IDSOPORTE:
+                type: integer
+              SOPORTE:
+                type: string
+              UBICACIONSOPORTE:
+                type: string
+              IDUBICACIONSOPORTE:
+                type: integer
+              IDSECCION:
+                type: integer
+              SECCION:
+                type: string
+              IDSUPERSOPORTE:
+                type: integer
+              SUPERSOPORTE:
+                type: string
+              URL:
+                type: string
+                format: url
+              IDBWRESOURCE:
+                type: integer
+              MOZRANK:
+                type: string
+              LANGUAGE:
+                type: string
+              AUTHORCOUNTRYCODE:
+                type: string
+              TWITTERAUTHOR:
+                type: string
+              AUTHOR:
+                type: string
+          
+  /getnoticiasprensa_contador/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Prensa"
+      description: Obtiene el número de noticias (menciones) de prensa entre un intervalo de fechas.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+
+  /getnoticiasprensa_categoria_contador/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Prensa"
+      description: Obtiene el número de noticias (menciones) de prensa entre un intervalo de fechas para una categoría determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url
+          
+  /getnoticiasprensa_categoria_contador_y_vpe/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Prensa"
+      description: Obtiene el número de noticias (menciones) de prensa entre un intervalo de fechas para una categoría determinaday además relaiza los cálculos para obtener el valor publicitario equivalente del conjunto de noticias obtenidos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url
+              VPE:
+                type: integer
+              AUDIENCIA:
+                type: integer
+
+  /getnoticiasprensa_categoria_precio/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Prensa"
+      description: Obtiene el sumatorio del precio de los soportes relativo al número de noticias (menciones) de prensa entre un intervalo de fechas para una categoría determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              PRECIO:
+                type: integer
+          
+  /getnoticiasprensa_contador_soporte/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Prensa"
+      description: Obtiene el número de noticias (menciones) de prensa entre un intervalo de fechas desglosado por los identificadores de los soportes.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDSOPORTE:
+                type: integer
+              NUM:
+                type: integer
+
+  /getnoticiasprensa_contador_pesos/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Prensa"
+      description: Obtiene el número de noticias (menciones) de prensa entre un intervalo de fechas desglosado por los identificadores de los pesos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDPESO:
+                type: integer
+              NUM:
+                type: integer
+  
+  /getnoticiasprensa_detalle/{ApiKey}/{idzona}/{Idnoticia}/{FechaNoticia}:
+    get:
+      tags: 
+        - "Prensa"
+      description: Obtiene el número de noticias (menciones) de prensa entre un intervalo de fechas desglosado por los identificadores de los pesos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idnoticia
+        in: path
+        description: Identificador de la noticia.
+        type: integer
+        required: true
+      - name: FechaNoticia
+        in: path
+        description: Fecha de publicación de la noticia, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDNOTICIA:
+                type: integer
+              IDSOPORTE:
+                type: integer
+              IDSECCION:
+                type: integer
+              IDOPERARIO:
+                type: integer
+              FECHA:
+                type: string
+                format: date
+              FECHAPICADO:
+                type: string
+                format: date
+              FECHAHORAACTUALIZADO:
+                type: string
+                format: date
+              PAGINA:
+                type: integer
+              URL:
+                type: string
+                format: url
+              TEMA:
+                type: string
+              FILA:
+                type: integer
+              COL:
+                type: integer
+              IDMOVIL:
+                type: integer
+              IDANALISIS:
+                type: integer
+              REPETIDA:
+                type: integer
+              LISTADOMOVIL:
+                type: integer
+              NOTAS:
+                type: string
+          
+  /getnoticiasprensa_detalle_categorias/{ApiKey}/{idzona}/{Idnoticia}/{FechaNoticia}:
+    get:
+      tags: 
+        - "Prensa"
+      description: Obtiene todas las categorías vinculadas a una noticia de prensa determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idnoticia
+        in: path
+        description: Identificador de la noticia.
+        type: integer
+        required: true
+      - name: FechaNoticia
+        in: path
+        description: Fecha de publicación de la noticia, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+
+
+
+  /getnoticiastv/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Television"
+      description: Obtiene todas las noticias (menciones) de TV entre un intervalo de fechas.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+              CODIGO:
+                type: integer
+              NOMBRE:
+                type: string
+              NOMBREWEB:
+                type: string
+              IDUBICACIONCATEGORIA:
+                type: integer
+              LONGITUD:
+                type: integer
+              LATITUD:
+                type: integer
+
+  /getnoticiastv_x_categorias/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}/{Offset}/{Limit}:
+    post:
+      tags: 
+        - "Television"
+      description: Obtiene todas las noticias (menciones) de TV entre un intervalo de fechas para un listado JSON de entrada de categorías.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      - name : Offset
+        in: path
+        description: ""
+        required: true
+        type: integer
+      - name : Limit
+        in: path
+        description: ""
+        required: true
+        type: integer
+      - name: Json
+        in: header
+        required: true
+        description: Json con campos IDCATEGORIA y valor del id.
+        type: string
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDNOTICIA:
+                type: integer
+              FECHA:
+                type: string
+                format: date
+              FECHAHORAPICADO:
+                type: string
+                format: date
+              TEMA:
+                type: string
+                format: url
+              IDSOPORTE:
+                type: integer
+              SOPORTE:
+                type: string
+              UBICACIONSOPORTE:
+                type: string
+              IDUBICACIONSOPORTE:
+                type: integer
+              IDSECCION:
+                type: integer
+              SECCION:
+                type: string
+              IDSUPERSOPORTE:
+                type: integer
+              SUPERSOPORTE:
+                type: string
+              URL:
+                type: string
+                format: url
+              IDBWRESOURCE:
+                type: integer
+              MOZRANK:
+                type: string
+              LANGUAGE:
+                type: string
+              AUTHORCOUNTRYCODE:
+                type: string
+              TWITTERAUTHOR:
+                type: string
+              AUTHOR:
+                type: string
+          
+  /getnoticiastv_contador/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Television"
+      description: Obtiene el número de noticias (menciones) de TV entre un intervalo de fechas.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+          
+  /getnoticiastv_categoria_contador/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Television"
+      description: Obtiene el número de noticias (menciones) de TV entre un intervalo de fechas para una categoría determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url
+          
+  /getnoticiastv_categoria_contador_y_vpe/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Television"
+      description: Obtiene el número de noticias (menciones) de TV entre un intervalo de fechas para una categoría determinaday además relaiza los cálculos para obtener el valor publicitario equivalente del conjunto de noticias obtenidos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url
+              VPE:
+                type: integer
+              AUDIENCIA:
+                type: integer
+
+  /getnoticiastv_categoria_precio/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Television"
+      description: Obtiene el sumatorio del precio de los soportes relativo al número de noticias (menciones) de TV entre un intervalo de fechas para una categoría determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              PRECIO:
+                type: integer
+          
+  /getnoticiastv_contador_soporte/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Television"
+      description: Obtiene el número de noticias (menciones) de TV entre un intervalo de fechas desglosado por los identificadores de los soportes.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDSOPORTE:
+                type: integer
+              NUM:
+                type: integer
+
+  /getnoticiastv_contador_pesos/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Television"
+      description: Obtiene el número de noticias (menciones) de TV entre un intervalo de fechas desglosado por los identificadores de los pesos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDPESO:
+                type: integer
+              NUM:
+                type: integer
+  
+  /getnoticiastv_detalle/{ApiKey}/{idzona}/{Idnoticia}/{FechaNoticia}:
+    get:
+      tags: 
+        - "Television"
+      description: Obtiene el número de noticias (menciones) de TV entre un intervalo de fechas desglosado por los identificadores de los pesos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idnoticia
+        in: path
+        description: Identificador de la noticia.
+        type: integer
+        required: true
+      - name: FechaNoticia
+        in: path
+        description: Fecha de publicación de la noticia, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDNOTICIA:
+                type: integer
+              IDSOPORTE:
+                type: integer
+              IDSECCION:
+                type: integer
+              IDOPERARIO:
+                type: integer
+              FECHA:
+                type: string
+                format: date
+              FECHAPICADO:
+                type: string
+                format: date
+              FECHAHORAACTUALIZADO:
+                type: string
+                format: date
+              PAGINA:
+                type: integer
+              URL:
+                type: string
+                format: url
+              TEMA:
+                type: string
+              FILA:
+                type: integer
+              COL:
+                type: integer
+              IDMOVIL:
+                type: integer
+              IDANALISIS:
+                type: integer
+              REPETIDA:
+                type: integer
+              LISTADOMOVIL:
+                type: integer
+              NOTAS:
+                type: string
+          
+  /getnoticiastv_detalle_categorias/{ApiKey}/{idzona}/{Idnoticia}/{FechaNoticia}:
+    get:
+      tags: 
+        - "Television"
+      description: Obtiene todas las categorías vinculadas a una noticia de TV determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idnoticia
+        in: path
+        description: Identificador de la noticia.
+        type: integer
+        required: true
+      - name: FechaNoticia
+        in: path
+        description: Fecha de publicación de la noticia, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+
+  /getnoticiasradio/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Radio"
+      description: Obtiene todas las noticias (menciones) de radio entre un intervalo de fechas.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+              CODIGO:
+                type: integer
+              NOMBRE:
+                type: string
+              NOMBREWEB:
+                type: string
+              IDUBICACIONCATEGORIA:
+                type: integer
+              LONGITUD:
+                type: integer
+              LATITUD:
+                type: integer
+
+  /getnoticiasradio_x_categorias/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}/{Offset}/{Limit}:
+    post:
+      tags: 
+        - "Radio"
+      description: Obtiene todas las noticias (menciones) de radio entre un intervalo de fechas para un listado JSON de entrada de categorías.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      - name : Offset
+        in: path
+        description: ""
+        required: true
+        type: integer
+      - name : Limit
+        in: path
+        description: ""
+        required: true
+        type: integer
+      - name: Json
+        in: header
+        required: true
+        description: Json con campos IDCATEGORIA y valor del id.
+        type: string
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDNOTICIA:
+                type: integer
+              FECHA:
+                type: string
+                format: date
+              FECHAHORAPICADO:
+                type: string
+                format: date
+              TEMA:
+                type: string
+                format: url
+              IDSOPORTE:
+                type: integer
+              SOPORTE:
+                type: string
+              UBICACIONSOPORTE:
+                type: string
+              IDUBICACIONSOPORTE:
+                type: integer
+              IDSECCION:
+                type: integer
+              SECCION:
+                type: string
+              IDSUPERSOPORTE:
+                type: integer
+              SUPERSOPORTE:
+                type: string
+              URL:
+                type: string
+                format: url
+              IDBWRESOURCE:
+                type: integer
+              MOZRANK:
+                type: string
+              LANGUAGE:
+                type: string
+              AUTHORCOUNTRYCODE:
+                type: string
+              TWITTERAUTHOR:
+                type: string
+              AUTHOR:
+                type: string
+          
+  /getnoticiasradio_contador/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Radio"
+      description: Obtiene el número de noticias (menciones) de radio entre un intervalo de fechas.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+          
+  /getnoticiasradio_categoria_contador/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Radio"
+      description: Obtiene el número de noticias (menciones) de radio entre un intervalo de fechas para una categoría determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url
+          
+  /getnoticiaseradio_categoria_contador_y_vpe/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Radio"
+      description: Obtiene el número de noticias (menciones) de radio entre un intervalo de fechas para una categoría determinaday además relaiza los cálculos para obtener el valor publicitario equivalente del conjunto de noticias obtenidos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url
+              VPE:
+                type: integer
+              AUDIENCIA:
+                type: integer
+
+  /getnoticiasradio_categoria_precio/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Radio"
+      description: Obtiene el sumatorio del precio de los soportes relativo al número de noticias (menciones) de radio entre un intervalo de fechas para una categoría determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              PRECIO:
+                type: integer
+          
+  /getnoticiasradio_contador_soporte/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Radio"
+      description: Obtiene el número de noticias (menciones) de radio entre un intervalo de fechas desglosado por los identificadores de los soportes.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDSOPORTE:
+                type: integer
+              NUM:
+                type: integer
+
+  /getnoticiasradio_contador_pesos/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Radio"
+      description: Obtiene el número de noticias (menciones) de radio entre un intervalo de fechas desglosado por los identificadores de los pesos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDPESO:
+                type: integer
+              NUM:
+                type: integer
+  
+  /getnoticiasradio_detalle/{ApiKey}/{idzona}/{Idnoticia}/{FechaNoticia}:
+    get:
+      tags: 
+        - "Radio"
+      description: Obtiene el número de noticias (menciones) de radio entre un intervalo de fechas desglosado por los identificadores de los pesos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idnoticia
+        in: path
+        description: Identificador de la noticia.
+        type: integer
+        required: true
+      - name: FechaNoticia
+        in: path
+        description: Fecha de publicación de la noticia, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDNOTICIA:
+                type: integer
+              IDSOPORTE:
+                type: integer
+              IDSECCION:
+                type: integer
+              IDOPERARIO:
+                type: integer
+              FECHA:
+                type: string
+                format: date
+              FECHAPICADO:
+                type: string
+                format: date
+              FECHAHORAACTUALIZADO:
+                type: string
+                format: date
+              PAGINA:
+                type: integer
+              URL:
+                type: string
+                format: url
+              TEMA:
+                type: string
+              FILA:
+                type: integer
+              COL:
+                type: integer
+              IDMOVIL:
+                type: integer
+              IDANALISIS:
+                type: integer
+              REPETIDA:
+                type: integer
+              LISTADOMOVIL:
+                type: integer
+              NOTAS:
+                type: string
+          
+  /getnoticiasradio_detalle_categorias/{ApiKey}/{idzona}/{Idnoticia}/{FechaNoticia}:
+    get:
+      tags: 
+        - "Television"
+      description: Obtiene todas las categorías vinculadas a una noticia de radio determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idnoticia
+        in: path
+        description: Identificador de la noticia.
+        type: integer
+        required: true
+      - name: FechaNoticia
+        in: path
+        description: Fecha de publicación de la noticia, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+
+  /getnoticiasinternet/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Medios Digitales"
+      description: Obtiene todas las noticias de internet.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+              CODIGO:
+                type: integer
+              NOMBRE:
+                type: string
+              NOMBREWEB:
+                type: string
+              IDUBICACIONCATEGORIA:
+                type: integer
+              LONGITUD:
+                type: integer
+              LATITUD:
+                type: integer
+
+  /getnoticiasinternet_x_categorias/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}/{Offset}/{Limit}:
+    post:
+      tags: 
+        - "Medios Digitales"
+      description: Obtiene todas las noticias de internet.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      - name : Offset
+        in: path
+        description: ""
+        required: true
+        type: integer
+      - name : Limit
+        in: path
+        description: ""
+        required: true
+        type: integer
+      - name: Json
+        in: header
+        required: true
+        description: Json con campos IDCATEGORIA y valor del id.
+        type: string
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDNOTICIA:
+                type: integer
+              FECHA:
+                type: string
+                format: date
+              FECHAHORAPICADO:
+                type: string
+                format: date
+              TEMA:
+                type: string
+                format: url
+              IDSOPORTE:
+                type: integer
+              SOPORTE:
+                type: string
+              UBICACIONSOPORTE:
+                type: string
+              IDUBICACIONSOPORTE:
+                type: integer
+              IDSECCION:
+                type: integer
+              SECCION:
+                type: string
+              IDSUPERSOPORTE:
+                type: integer
+              SUPERSOPORTE:
+                type: string
+              URL:
+                type: string
+                format: url
+              IDBWRESOURCE:
+                type: integer
+              MOZRANK:
+                type: string
+              LANGUAGE:
+                type: string
+              AUTHORCOUNTRYCODE:
+                type: string
+              TWITTERAUTHOR:
+                type: string
+              AUTHOR:
+                type: string
+          
+  /getnoticiasinternet_contador/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Medios Digitales"
+      description: Obtiene el número de noticias (menciones) de internet entre un intervalo de fechas.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+          
+  /getnoticiasinternet_categoria_contador/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Medios Digitales"
+      description: Obtiene el número de noticias (menciones) de internet entre un intervalo de fechas para una categoría determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url
+          
+  /getnoticiasinternet_categoria_contador_y_vpe/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Medios Digitales"
+      description: Obtiene el número de noticias (menciones) de internet entre un intervalo de fechas para una categoría determinaday además relaiza los cálculos para obtener el valor publicitario equivalente del conjunto de noticias obtenidos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url
+              VPE:
+                type: integer
+              AUDIENCIA:
+                type: integer
+
+  /getnoticiasinternet_categoria_precio/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Medios Digitales"
+      description: Obtiene el sumatorio del precio de los soportes relativo al número de noticias (menciones) de internet entre un intervalo de fechas para una categoría determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              PRECIO:
+                type: integer
+          
+  /getnoticiasinternet_contador_soporte/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Medios Digitales"
+      description: Obtiene el número de noticias (menciones) de internet entre un intervalo de fechas desglosado por los identificadores de los soportes.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDSOPORTE:
+                type: integer
+              NUM:
+                type: integer
+
+  /getnoticiasinternet_contador_pesos/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Medios Digitales"
+      description: Obtiene el número de noticias (menciones) de internet entre un intervalo de fechas desglosado por los identificadores de los pesos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDPESO:
+                type: integer
+              NUM:
+                type: integer
+  
+  /getnoticiasinternet_detalle/{ApiKey}/{idzona}/{Idnoticia}/{FechaNoticia}:
+    get:
+      tags: 
+        - "Medios Digitales"
+      description: Obtiene el número de noticias (menciones) de internet entre un intervalo de fechas desglosado por los identificadores de los pesos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idnoticia
+        in: path
+        description: Identificador de la noticia.
+        type: integer
+        required: true
+      - name: FechaNoticia
+        in: path
+        description: Fecha de publicación de la noticia, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDNOTICIA:
+                type: integer
+              IDSOPORTE:
+                type: integer
+              IDSECCION:
+                type: integer
+              IDOPERARIO:
+                type: integer
+              FECHA:
+                type: string
+                format: date
+              FECHAPICADO:
+                type: string
+                format: date
+              FECHAHORAACTUALIZADO:
+                type: string
+                format: date
+              PAGINA:
+                type: integer
+              URL:
+                type: string
+                format: url
+              TEMA:
+                type: string
+              FILA:
+                type: integer
+              COL:
+                type: integer
+              IDMOVIL:
+                type: integer
+              IDANALISIS:
+                type: integer
+              REPETIDA:
+                type: integer
+              LISTADOMOVIL:
+                type: integer
+              NOTAS:
+                type: string
+          
+  /getnoticiasinternet_detalle_categorias/{ApiKey}/{idzona}/{Idnoticia}/{FechaNoticia}:
+    get:
+      tags: 
+        - "Medios Digitales"
+      description: Obtiene todas las categorías vinculadas a una noticia de internet determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idnoticia
+        in: path
+        description: Identificador de la noticia.
+        type: integer
+        required: true
+      - name: FechaNoticia
+        in: path
+        description: Fecha de publicación de la noticia, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+          
+  /getnoticiassocialmedia/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Redes Sociales"
+      description: Obtiene todas las noticias de social media.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+              FECHA:
+                type: string
+                format: date
+              TEMA:
+                type: string
+
+
+  /getnoticiassocialmedia_x_categorias/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}/{Offset}/{Limit}:
+    post:
+      tags: 
+        - "Redes Sociales"
+      description: Obtiene todas las noticias de social media.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      - name : Offset
+        in: path
+        description: ""
+        required: true
+        type: integer
+      - name : Limit
+        in: path
+        description: ""
+        required: true
+        type: integer
+      - name: Json
+        in: header
+        required: true
+        description: Json con campos IDCATEGORIA y valor del id.
+        type: string
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDNOTICIA:
+                type: integer
+              FECHA:
+                type: string
+                format: date
+              FECHAHORAPICADO:
+                type: string
+                format: date
+              TEMA:
+                type: string
+                format: url
+              IDSOPORTE:
+                type: integer
+              SOPORTE:
+                type: string
+              UBICACIONSOPORTE:
+                type: string
+              IDUBICACIONSOPORTE:
+                type: integer
+              IDSECCION:
+                type: integer
+              SECCION:
+                type: string
+              IDSUPERSOPORTE:
+                type: integer
+              SUPERSOPORTE:
+                type: string
+              URL:
+                type: string
+                format: url
+              IDBWRESOURCE:
+                type: integer
+              MOZRANK:
+                type: string
+              LANGUAGE:
+                type: string
+              AUTHORCOUNTRYCODE:
+                type: string
+              TWITTERAUTHOR:
+                type: string
+              AUTHOR:
+                type: string
+          
+  /getnoticiassocialmedia_contador/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Redes Sociales"
+      description: Obtiene el número de noticias (menciones) de social media entre un intervalo de fechas.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+
+
+  /getnoticiassocialmedia_categoria_contador/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Redes Sociales"
+      description: Obtiene el número de noticias (menciones) de social media entre un intervalo de fechas para una categoría determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url
+          
+  /getnoticiassocialmedia_categoria_precio/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Redes Sociales"
+      description: Obtiene el sumatorio del precio de los soportes relativo al número de noticias (menciones) de social media entre un intervalo de fechas para una categoría determinada.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              PRECIO:
+                type: integer
+
+          
+  /getnoticiassocialmedia_contador_soporte/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Redes Sociales"
+      description: Obtiene el número de noticias (menciones) de social media entre un intervalo de fechas desglosado por los identificadores de los soportes.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDSOPORTE:
+                type: integer
+              NUM:
+                type: integer
+
+
+  /getnoticiassocialmedia_contador_pesos/{ApiKey}/{idzona}/{FechaInicial}/{FechaFinal}:
+    get:
+      tags: 
+        - "Redes Sociales"
+      description: Obtiene el número de noticias (menciones) de social media entre un intervalo de fechas desglosado por los identificadores de los pesos.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: FechaInicial
+        in: path
+        description: Fecha inicial del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        type: integer
+        required: true
+      - name: FechaFinal
+        in: path
+        description: Fecha final del periodo del que se pedirán las noticias, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDPESOS:
+                type: integer
+              NUM:
+                type: integer
+  
+
+  /getnoticiassocialmedia_detalle/{ApiKey}/{idzona}/{Idnoticia}/{FechaNoticia}:
+    get:
+      tags: 
+        - "Redes Sociales"
+      description: Obtiene todos los campos de información de una noticia de social media determinada. Cada noticia se identifica unívocamente por su identificador y la fecha (debido al sharding del sistema).
+      parameters:
+      - name: ApiKey
+        in: path
+        
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idnoticia
+        in: path
+        description: Identificador de la noticia.
+        type: integer
+        required: true
+      - name: FechaNoticia
+        in: path
+        description: Fecha de publicación de la noticia, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDNOTICIA:
+                type: integer
+              IDSOPORTE:
+                type: integer
+              IDSECCION:
+                type: integer
+              IDOPERARIO:
+                type: integer
+              FECHA:
+                type: string
+                format: date
+              HORA:
+                type: string
+                format: HH:MM:SS
+              FECHAPICADO:
+                type: string
+                format: date
+              HORAPICADO:
+                type: string
+                format: HH:MM:SS  
+              FECHAHORAPICADO:
+                type: string
+                format: date
+              FECHAHORAACTUALIZADO:
+                type: string
+                format: date         
+              URL:
+                type: string
+                format: url
+              TEMA:
+                type: string
+              ROLLO:
+                type: string
+                format: url
+              IDANALISIS:
+                type: integer
+              IDBWRESOURCE:
+                type: integer
+              MOZRANK:
+                type: integer
+              LANGUAGE:
+                type: string
+              AUTHORCOUNTRYCODE:
+                type: integer
+              TWITTERAUTHOR:
+                type: string                        
+
+
+  /getnoticiassocialmedia_detalle_categorias/{ApiKey}/{idzona}/{Idnoticia}/{FechaNoticia}:
+    get:
+      tags: 
+        - "Redes Sociales"
+      description: Obtiene todas las categorías vinculadas a una noticia de social media determinada. NO FUNCIONA
+      parameters:
+      - name: ApiKey
+        in: path
+        
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idnoticia
+        in: path
+        description: Identificador de la noticia.
+        type: integer
+        required: true
+      - name: FechaNoticia
+        in: path
+        description: Fecha de publicación de la noticia, con formato DDMMYYYY
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDPESO:
+                type: integer
+              NUM:
+                type: integer
+
+  /getusuarios/{ApiKey}/{idzona}:
+    get:
+      tags: 
+        - "Usuarios"
+      description: Obtiene el listado de todos los usuarios de la zona correspondiente.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDUSUARIO:
+                type: integer
+              LOGIN:
+                type: string
+          
+  /getusuarios_detalle/{ApiKey}/{idzona}/{Idusuario}:
+    get:
+      tags: 
+        - "Usuarios"
+      description: Obtiene el listado de todos los usuarios de la zona correspondiente.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idusuario
+        in: path
+        description: Identificador del usuario
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDUSUARIO:
+                type: integer
+              IDZONA:
+                type: integer
+              LOGIN:
+                type: string
+              NOMBRE:
+                type: string
+              APELLIDO1:
+                type: string
+              APELLIDO2:
+                type: string
+              EMAIL:
+                type: string
+              TWITTER:
+                type: string
+              TIPO:
+                type: string
+              ACTIVO:
+                type: integer
+                format: binary
+              TELEFONO:
+                type: integer
+              CARGO:
+                type: string
+              CRITICAL_ALERTS:
+                type: object
+          
+          
+  /getusuarios_categorias/{ApiKey}/{idzona}/{Idusuario}:
+    get:
+      tags: 
+        - "Usuarios"
+      description: Obtiene todas las categorías vinculadas a árboles pertenecientes al perfil donde se ubica el usuario.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idusuario
+        in: path
+        description: Identificador del usuario
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUMARBOL:
+                type: integer
+              CONTENIDO:
+                type: object
+                properties:
+                  IDCATEGORIA:
+                    type: integer
+                  NOMBREWEB:
+                    type: string
+                  CHILDREN:
+                    type: object 
+          
+  /getusuarios_login/{ApiKey}/{idzona}/{Idusuario}/{login}/{password}:
+    get:
+      tags: 
+        - "Usuarios"
+      description: Obtiene todos los campos de información de un usuario determinado.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idusuario
+        in: path
+        description: Identificador del usuario
+        required: true
+        type: integer
+      - name: login
+        description: Cadena de texto que representa al usuario.
+        in: path
+        required: true
+        type: string
+      - name: password
+        description: Contraseña del usuario.
+        required: true
+        in: path
+        type: string
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUMARBOL:
+                type: integer
+          
+  /getusuarios_perfil/{ApiKey}/{idzona}/{Idusuario}:
+    get:
+      tags: 
+        - "Usuarios"
+      description: Obtiene los identificadores de los perfiles vinculados al usuario.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idusuario
+        in: path
+        description: Identificador del usuario
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDUSUARIO:
+                type: integer
+              IDPERFIL:
+                type: integer
+          
+  /getusuarios_auditoria/{ApiKey}/{idzona}/{Idusuario}/{fecha_inicial}/{fecha_final}:
+    get:
+      tags: 
+        - "Usuarios"
+      description: Obtiene todas las acciones realizadas por el usuario dentro del sistema. Existe un campo MENSAJE el cual indica la acción concreta (Por ejemplo':' LOGIN).
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idusuario
+        in: path
+        description: Identificador del usuario
+        required: true
+        type: integer
+      - name: fecha_inicial
+        in: path
+        description: Fecha incial (en formato DDMMYYYY)
+        required: true
+        type: integer
+      - name: fecha_final
+        in: path
+        description: Fecha incial (en formato DDMMYYYY)
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              ID:
+                type: integer
+              UDER_ID:
+                type: integer
+              LOGIN:
+                type: string
+                format: date
+              CONSULTA:
+                type: object
+          
+  /getsoportes/{ApiKey}/{idzona}:
+    get:
+      tags: 
+        - "Soportes"
+      description: Obtiene todos los soportes de la zona.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDSOPORTE:
+                type: integer
+              IDSUPERSOPORTE:
+                type: integer
+              NOMBRE:
+                type: string
+              UBICACIONSOPORTE:
+                type: string
+              IDUBICACIONSOPORTE:
+                type: integer
+  
+  /getsoportes_detalle/{ApiKey}/{idzona}/{idsoporte}:
+    get:
+      tags: 
+        - "Soportes"
+      description: Obtiene todos los campos de información de un soporte concreto.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: idsoporte
+        in: path
+        description: Valor identificativo del soporte.
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDSOPORTE:
+                type: integer
+              IDSUPERSOPORTE:
+                type: integer
+              CODIGO:
+                type: integer
+              NOMBRE:
+                type: string
+              PRECIO:
+                type: integer
+              ORDEN:
+                type: integer
+              TIPO:
+                type: string
+              ACTIVO:
+                type: integer
+              LOGO:
+                type: string
+              TINI:
+                type: string
+                format: date
+              TFIN:
+                type: string
+                format: date
+              DICCBASE:
+                type: integer
+          
+  /getsoportes_detalle/{ApiKey}/{idzona}:
+    get:
+      tags: 
+        - "Soportes"
+      description: Obtiene todos los supersoportes de la zona incluyendo los soportes.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDSUPERSOPORTE:
+                type: integer
+              NOMBRE:
+                type: string
+              PRECIO:
+                type: integer
+              ORDEN:
+                type: integer
+              TIPO:
+                type: string
+              LOGO:
+                type: string
+              SOPORTES:
+                type: object
+                properties:
+                  IDSOPORTE:
+                    type: integer
+                  IDSUPERSOPORTE:
+                    type: integer
+                  CODIGO:
+                    type: integer
+                  NOMBRE:
+                    type: string
+                  PRECIO:
+                    type: integer
+                  ORDEN:
+                    type: integer
+                  TIPO:
+                    type: string
+                  ACTIVO:
+                    type: integer
+
+  
+  /getperfiles{ApiKey}/{idzona}:
+    get:
+      tags: 
+        - "Perfiles"
+      description: Obtiene todos los perfiles de una zona.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDPERFIL:
+                type: integer
+              NOMBRE:
+                type: string
+          
+  /getperfiles_detalle/{ApiKey}/{idzona}/{Idperfil}:
+    get:
+      tags: 
+        - "Perfiles"
+      description: Obtiene todos los campos de información de un determinado perfil.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idperfil
+        in: path
+        description: Valor identificado del perfil.
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDPERFIL:
+                type: integer
+              IDSUPERPERFIL:
+                type: integer
+              NOMBRE:
+                type: string
+              NOMBREWEB:
+                type: string
+                format: url
+              PDF:
+                type: integer
+              PDFRUTA:
+                type: string
+              PDFEXTERNO:
+                type: integer
+              PDFRRUTAEXTERNO:
+                type: string
+              PDFORDEN:
+                type: integer
+              FTP:
+                type: string
+              USUARIOFTP:
+                type: string
+              PASSFTP:
+                type: string
+              MAILSIMPLE:
+                type: string
+              MAILXBLOQUE:
+                type: integer
+              ACTIVO:
+                type: integer
+              IDZONANATIVA:
+                type: integer
+              PDFBLQOUEA:
+                type: integer
+              PDFCABECERA:
+                type: integer
+              BANNER:
+                type: string
+              IDBANNER:
+                type: integer
+              PC_ESDEMO:
+                type: object
+              PC_FECHAINICIOCONTRATO:
+                type: string
+                format: date
+              PC_ES_INFOMEDIOS:
+                type: string
+              ACTIVO_SERVICIOS2:
+                type: object
+          
+  /getusuarios_desde_perfil/{ApiKey}/{idzona}/{Idperfil}:
+    get:
+      tags: 
+        - "Perfiles"
+      description: Obtiene los nombres y apellidos de los usuarios pertenecientes a un perfil dado.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idperfil
+        in: path
+        description: Valor identificado del perfil.
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDUSUARIO:
+                type: integer
+              NOMBRE:
+                type: string
+              ACTIVE:
+                type: integer
+                format: binary
+
+  /getperfiles_categorias/{ApiKey}/{idzona}/{Idperfil}:
+    get:
+      tags: 
+        - "Perfiles"
+      description: Obtiene todas las categorías incluidas en todos los árboles vinculados al perfil.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idperfil
+        in: path
+        description: Valor identificado del perfil.
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDCATEGORIA:
+                type: integer
+              CODIGO:
+                type: string
+              NOMBRE:
+                type: string
+              NOMBREWEB:
+                type: string
+          
+          
+  /getperfiles_arboles/{ApiKey}/{idzona}/{Idperfil}:
+    get:
+      tags: 
+        - "Perfiles"
+      description: Obtiene todos los árboles vinculados al perfil.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idperfil
+        in: path
+        description: Valor identificado del perfil.
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              IDARBOL:
+                type: integer
+              NOMBRE:
+                type: string
+              FICHEROPDF:
+                type: string
+              TIPO:
+                type: string
+              URL:
+                type: string
+              VINCULO:
+                type: string
+              IDZONANATIVA:
+                type: integer 
+          
+  /getperfiles_categorias_modo_arbol/{ApiKey}/{idzona}/{Idperfil}:
+    get:
+      tags: 
+        - "Perfiles"
+      description: Obtiene todas las categorías incluidas en todos los árboles vinculados al perfil. El resultado está en formato árbol.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idperfil
+        in: path
+        description: Valor identificado del perfil.
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUMARBOL:
+                type: integer
+              CONTENIDO:
+                type: object
+                properties:
+                  IDCATEGORIA:
+                    type: integer
+                  CODIDGO:
+                    type: string
+                  NOMBRE:
+                    type: string
+                  NOMBREWEB: 
+                    type: string
+                  CHILDREN:
+                    type: object
+          
+  /setusuario_alertas_cambiarestado/{ApiKey}/{idzona}:
+    post:
+      tags: 
+        - "Alertas"
+      description: Cambia el estado de una alerta.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+  /setusuario_alertas/{ApiKey}/{idzona}:
+    post:
+      tags: 
+        - "Alertas"
+      description: Crear o modifica una alerta.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok. 
+          
+  /setusuario_alertas_elimianralertas/{ApiKey}/{idzona}:
+    post:
+      tags: 
+        - "Alertas"
+      description: Elimina una alerta.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          
+  /getusuario_alertas/{ApiKey}/{idzona}/{user_id}:
+    get:
+      tags: 
+        - "Alertas"
+      description: Obtiene las alertas de un usuario.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: user_id
+        in: path
+        required: true
+        description: Identicador del usuario
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              client_id:
+                type: integer
+              media_id:
+                type: integer
+              category_geolocation:
+                type: integer
+              format_geolocation:
+                type: integer
+              active:
+                type: integer
+              single_email:
+                type: integer
+              frequency:
+                type: integer
+              frequency_from:
+                type: integer
+              frequency_to:
+                type: integer
+              frequency_weekend:
+                type: integer
+              frequency_from_weekend:
+                type: integer
+              frequency_to_weekend:
+                type: integer
+              frequency_type:
+                type: integer
+              way_of_showing:
+                type: integer
+              pdf:
+                type: integer
+              alert_type:
+                type: integer
+              config:
+                type: object
+              media_order:
+                type: integer
+              formats_object:
+                type: object
+              categories:
+                type: object
+
+  /getusuario_alertas_unica/{ApiKey}/{idzona}/{alerta_id}:
+    get:
+      tags: 
+        - "Alertas"
+      description: Obtiene una única alerta a partir de su identificador
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: alerta_id
+        in: path
+        required: true
+        description: Identicador de la alerta
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              client_id:
+                type: integer
+              media_id:
+                type: integer
+              category_geolocation:
+                type: integer
+              format_geolocation:
+                type: integer
+              active:
+                type: integer
+              single_email:
+                type: integer
+              frequency:
+                type: integer
+              frequency_from:
+                type: integer
+              frequency_to:
+                type: integer
+              frequency_weekend:
+                type: integer
+              frequency_from_weekend:
+                type: integer
+              frequency_to_weekend:
+                type: integer
+              frequency_type:
+                type: integer
+              way_of_showing:
+                type: integer
+              pdf:
+                type: integer
+              alert_type:
+                type: integer
+              config:
+                type: object
+              media_order:
+                type: integer
+              formats_object:
+                type: object
+              categories:
+                type: object
+            
+          
+  /getusuario_alertas_activas/{ApiKey}/{idzona}/{tipo_de_alerta}/{Time_from}/{Time_to}:
+    get:
+      tags: 
+        - "Alertas"
+      description: Obtiene una única alerta a partir de su identificador
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: tipo_de_alerta
+        in: path
+        required: true
+        description: Identicador del tipo de alerta
+        type: integer
+      - name: Time_to
+        in: path
+        required: true
+        description: X
+        type: integer
+      - name: Time_from
+        in: path
+        required: true
+        description: X
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              client_id:
+                type: integer
+              media_id:
+                type: integer
+              category_geolocation:
+                type: integer
+              format_geolocation:
+                type: integer
+              active:
+                type: integer
+              single_email:
+                type: integer
+              frequency:
+                type: integer
+              frequency_from:
+                type: integer
+              frequency_to:
+                type: integer
+              frequency_weekend:
+                type: integer
+              frequency_from_weekend:
+                type: integer
+              frequency_to_weekend:
+                type: integer
+              frequency_type:
+                type: integer
+              way_of_showing:
+                type: integer
+              pdf:
+                type: integer
+              alert_type:
+                type: integer
+              config:
+                type: object
+              media_order:
+                type: integer
+              formats_object:
+                type: object
+              categories:
+                type: object
+   
+  /getalertas_tipos/{ApiKey}/{idzona}:
+    get:
+      tags: 
+        - "Alertas"
+      description: Obtiene una única alerta a partir de su identificador.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              ID:
+                type: integer
+              SLUG:
+                type: string
+              NAME_ESP:
+                type: string
+          
+  /getalertas_pausasprogramadas/{ApiKey}/{idzona}:
+    get:
+      tags: 
+        - "Alertas"
+      description: Método para obtener las pausas programadas.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              config:
+                type: string
+                #example: \"cover_launch\":\"10:45\"
+          
+          
+  /setalertas_configuracion_sistema/{ApiKey}/{idzona}:
+    post:
+      tags: 
+        - "Alertas"
+      description: Guarda la configuración del sistema.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+
+  /getalertas_configuracion_sistema/{ApiKey}/{idzona}:
+    get:
+      tags: 
+        - "Alertas"
+      description: Obtiene la configuración del sistema.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              config:
+                type: string
+                #example: \"cover_launch\":\"10:45\"
+  
+  /getalertas_configuracion_alertas/{ApiKey}/{idzona}:
+    get:
+      tags: 
+        - "Alertas"
+      description: Obtiene la configuración de de las alertas. No funciona???
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.        
+    
+  /setalertas_configuracion_alertas/{ApiKey}/{idzona}:
+    post:
+      tags: 
+        - "Alertas"
+      description: Guarda la configuración de de las alertas
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.     
+          
+          
+  /get_url_multimedia_tv/{ApiKey}/{idzona}/{Mes}/{Año}/{id_noticia}:
+    get:
+      tags: 
+        - "Obtención de recursos multimedia"
+      description: Obtiene la url con el video de una determinada noticia de TV.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Mes
+        in: path
+        description: Mes
+        required: true
+        type: integer
+      - name: Año
+        in: path
+        description: Año.
+        required: true
+        type: integer
+      - name: id_noticia
+        in: path
+        description: Valor identificador de la noticia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+                URL:
+                  type: string
+                  format: url
+
+  /get_url_multimedia_radio/{ApiKey}/{idzona}/{Mes}/{Año}/{id_noticia}:
+    get:
+      tags: 
+        - "Obtención de recursos multimedia"
+      description: Obtiene la url con el video de una determinada noticia de RADIO.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Mes
+        in: path
+        description: Mes
+        required: true
+        type: integer
+      - name: Año
+        in: path
+        description: Año.
+        required: true
+        type: integer
+      - name: id_noticia
+        in: path
+        description: Valor identificador de la noticia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+                URL:
+                  type: string
+                  format: url
+
+  /get_url_pdf_prensa/{ApiKey}/{idzona}/{Mes}/{Año}/{id_noticia}:
+    get:
+      tags: 
+        - "Obtención de recursos multimedia"
+      description: Obtiene la url con el video de una determinada noticia de PRENSA.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Mes
+        in: path
+        description: Mes
+        required: true
+        type: integer
+      - name: Año
+        in: path
+        description: Año.
+        required: true
+        type: integer
+      - name: id_noticia
+        in: path
+        description: Valor identificador de la noticia
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+                URL:
+                  type: string
+                  format: url     
+          
+  /get_url_portadas/{ApiKey}/{idzona}/{Fecha}:
+    get:
+      tags: 
+        - "Obtención de recursos multimedia"
+      description: Obtiene el PDF de las portadas de prensa para un día determinado.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Fecha
+        in: path
+        description: Fecha en formato AAAAMMDD
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+                URL:
+                  type: string
+                  format: url
+
+  /get_url_dossier_con_titulares/{ApiKey}/{idzona}/{MedioFecha}:
+    get:
+      tags: 
+        - "Obtención de recursos multimedia"
+      description: Visualizar un documento PDF con los titulares hipervinculados a las noticias que se suministren (dossier de titulares).
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: MedioFecha
+        in: path
+        description: Medio y fecha, indicándolo como en este ejemplo "RADIO201603_2782-PRENSA201603_12"
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+                URL:
+                  type: string
+                  format: url
+
+  /get_url_dossier/{ApiKey}/{idzona}/{Id_perfil}/{ID_Arbol}/{Fecha}:
+    get:
+      tags: 
+        - "Obtención de recursos multimedia"
+      description: Obtiene la url con el video de una determinada noticia de TV.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Id_perfil
+        in: path
+        description: Identificador del perfil
+        required: true
+        type: integer
+      - name: ID_Arbol
+        in: path
+        description: Identificador del árbol.
+        required: true
+        type: integer
+      - name: Fecha
+        in: path
+        description: Fecha para la que se desea obtener el dossier.
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+                URL:
+                  type: string
+                  format: url
+              
+          
+          
+  /getnoticiastv_categoria_contador_diseccionado/{ApiKey}/{idzona}/{Idcategoria}/{Fecha_inicial}/{Fecha_final}/{Idsoporte}/{Idsupersoporte}:
+    get:
+      tags: 
+        - "Cuantificación de menciones"
+      description: Obtiene el número de noticias (menciones) de TV entre un intervalo de fechas para una categoría determinada diseccionado por soporte o supersoporte.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idcategoria
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Fecha_inicial
+        in: path
+        description: Fecha inicial (en formato DDMMYYYY).
+        required: true
+        type: integer
+      - name: Fecha_final
+        in: path
+        description: Fecha final (en formato DDMMYYYY).
+        required: true
+        type: integer
+      - name: Idsoporte
+        in: path
+        description: (o array separado por guiones). Para no filtrar por soporte, enviar un 0.
+        required: true
+        type: integer
+      - name: Idsupersoporte
+        in: path
+        description: (o array separado por guiones). Para no filtrar por soporte, enviar un 0.
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url.  
+          
+  /getnoticiasradio_categoria_contador_diseccionado/{ApiKey}/{idzona}/{Idcategoria}/{Fecha_inicial}/{Fecha_final}/{Idsoporte}/{Idsupersoporte}:
+    get:
+      tags: 
+        - "Cuantificación de menciones"
+      description: Obtiene el número de noticias (menciones) de TV entre un intervalo de fechas para una categoría determinada diseccionado por soporte o supersoporte.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idcategoria
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Fecha_inicial
+        in: path
+        description: Fecha inicial (en formato DDMMYYYY).
+        required: true
+        type: integer
+      - name: Fecha_final
+        in: path
+        description: Fecha final (en formato DDMMYYYY).
+        required: true
+        type: integer
+      - name: Idsoporte
+        in: path
+        description: (o array separado por guiones). Para no filtrar por soporte, enviar un 0.
+        required: true
+        type: integer
+      - name: Idsupersoporte
+        in: path
+        description: (o array separado por guiones). Para no filtrar por soporte, enviar un 0.
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url 
+          
+  /getnoticiasprensa_categoria_contador_diseccionado/{ApiKey}/{idzona}/{Idcategoria}/{Fecha_inicial}/{Fecha_final}/{Idsoporte}/{Idsupersoporte}:
+    get:
+      tags: 
+        - "Cuantificación de menciones"
+      description: Obtiene el número de noticias (menciones) de TV entre un intervalo de fechas para una categoría determinada diseccionado por soporte o supersoporte.
+      parameters:
+      - name: ApiKey
+        in: path
+        description: Key de la Api
+        required: true
+        type: string
+      - name: idzona
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Idcategoria
+        in: path
+        description: Valor numérico que indica la zona  1 Canarias, 5 Colombia
+        required: true
+        type: integer
+      - name: Fecha_inicial
+        in: path
+        description: Fecha inicial (en formato DDMMYYYY).
+        required: true
+        type: integer
+      - name: Fecha_final
+        in: path
+        description: Fecha final (en formato DDMMYYYY).
+        required: true
+        type: integer
+      - name: Idsoporte
+        in: path
+        description: (o array separado por guiones). Para no filtrar por soporte, enviar un 0.
+        required: true
+        type: integer
+      - name: Idsupersoporte
+        in: path
+        description: (o array separado por guiones). Para no filtrar por soporte, enviar un 0.
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: object
+            properties:
+              NUM:
+                type: integer
+              URL:
+                type: string
+                format: url
+              URLBARRACOMPLETA:
+                type: string
+                format: url
+
+  
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
